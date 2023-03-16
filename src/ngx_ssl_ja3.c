@@ -44,6 +44,7 @@ static const unsigned short GREASE[] = {
     0xdada,
     0xeaea,
     0xfafa,
+    0x0029, /* NOT GREASE : pre_shared_key extension on TLS1.3 session resumption causes 2 different fingerprints */
 };
 
 

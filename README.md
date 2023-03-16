@@ -8,12 +8,14 @@ This module adds to nginx the ability of new nginx variables for the TLS/SSL ja3
 
 For details about the ja3 fingerprint algorithm, check initial [project](https://github.com/salesforce/ja3).
 
+This implementation excludes extension (41) "pre_shared_key" used in TLS1.3 and treat it as GREASE extension. This prevents the generation of 2 different fingerprints (one for the initial session handshake, another one for the session resumption).
+
 ## Configuration
 
 ### Directives
 
 Revision 110 of chrome browser introduces TLS ClientHello extensions random permutation, which makes fingerprinting irrelevant with this browser (firefox is planning to do the same).
-Using JA3_SORT_EXT cc macro during nginx configure invocation (--with-cc-opt='-DJA3_SORT_EXT') configures the module to sort TLS extensions in the JA3 string. The resulting fincgerprint is not compliant anymore with the JA3 algorithm (at this time of writing), but allow to get back effectiveness of fingerprinting.
+Using JA3_SORT_EXT cc macro during nginx configure invocation (--with-cc-opt='-DJA3_SORT_EXT') configures the module to sort TLS extensions in the JA3 string. The resulting fincgerprint is not compliant anymore with the JA3 algorithm (at this time of writing), but allows to get back effectiveness of fingerprinting.
 
 ### Variables
 
