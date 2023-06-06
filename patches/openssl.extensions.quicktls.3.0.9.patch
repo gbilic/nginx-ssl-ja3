@@ -1,0 +1,89 @@
+diff --git a/include/openssl/tls1.h b/include/openssl/tls1.h
+index 2e46cf80d3..c883d0f4fc 100644
+--- a/include/openssl/tls1.h
++++ b/include/openssl/tls1.h
+@@ -116,6 +116,9 @@
+ /* ExtensionType value from RFC7301 */
+ # define TLSEXT_TYPE_application_layer_protocol_negotiation 16
+
++/* ExtensionType value from RFC6961 */
++# define TLSEXT_TYPE_status_request_v2  17
++
+ /*
+  * Extension type for Certificate Transparency
+  * https://tools.ietf.org/html/rfc6962#section-3.3.1
+@@ -134,6 +137,15 @@
+ /* ExtensionType value from RFC7627 */
+ # define TLSEXT_TYPE_extended_master_secret      23
+
++/* [draft-ietf-tls-certificate-compression] */
++# define TLSEXT_TYPE_compress_certificate        27
++/* ExtensionType value from RFC8449 */
++# define TLSEXT_TYPE_record_size_limit           28
++
++/* Extension Type application_settings 17513 */
++// https://www.ietf.org/archive/id/draft-vvv-tls-alps-00.html
++# define TLSEXT_TYPE_application_settings     17513
++
+ /* ExtensionType value from RFC4507 */
+ # define TLSEXT_TYPE_session_ticket              35
+
+
+diff --git a/ssl/ssl_local.h b/ssl/ssl_local.h
+index e8819e7a28..b870ca3247 100644
+--- a/ssl/ssl_local.h
++++ b/ssl/ssl_local.h
+@@ -777,6 +777,10 @@
+     TLSEXT_IDX_quic_transport_parameters,
+     TLSEXT_IDX_padding,
+     TLSEXT_IDX_psk,
++    TLSEXT_IDX_compress_certificate,
++    TLSEXT_IDX_record_size_limit,
++    TLSEXT_IDX_application_settings,
++    TLSEXT_IDX_status_request_v2,
+     /* Dummy index - must always be the last entry */
+     TLSEXT_IDX_num_builtins
+ } TLSEXT_INDEX;
+diff --git a/ssl/statem/extensions.c b/ssl/statem/extensions.c
+index 8422161dc1..a7d9666c72 100644
+--- a/ssl/statem/extensions.c
++++ b/ssl/statem/extensions.c
+@@ -375,6 +375,38 @@
+         tls_construct_certificate_authorities,
+         tls_construct_certificate_authorities, NULL,
+     },
++    {
++        TLSEXT_TYPE_compress_certificate,
++        SSL_EXT_CLIENT_HELLO,
++        NULL,
++        NULL, NULL,
++        NULL,
++        NULL, NULL,
++    },
++    {
++        TLSEXT_TYPE_record_size_limit,
++        SSL_EXT_CLIENT_HELLO,
++        NULL,
++        NULL, NULL,
++        NULL,
++        NULL, NULL,
++    },
++    {
++        TLSEXT_TYPE_application_settings,
++        SSL_EXT_CLIENT_HELLO,
++        NULL,
++        NULL, NULL,
++        NULL,
++        NULL, NULL,
++    },
++    {
++        TLSEXT_TYPE_status_request_v2,
++        SSL_EXT_CLIENT_HELLO,
++        NULL,
++        NULL, NULL,
++        NULL,
++        NULL, NULL,
++    },
+ #ifndef OPENSSL_NO_QUIC
+     {
+         TLSEXT_TYPE_quic_transport_parameters_draft,
