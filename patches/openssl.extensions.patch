@@ -40,7 +40,7 @@ diff --git a/ssl/ssl_local.h b/ssl/ssl_local.h
 index e8819e7a28..b870ca3247 100644
 --- a/ssl/ssl_local.h
 +++ b/ssl/ssl_local.h
-@@ -719,6 +719,10 @@ typedef enum tlsext_index_en {
+@@ -719,6 +719,9 @@ typedef enum tlsext_index_en {
      TLSEXT_IDX_cryptopro_bug,
      TLSEXT_IDX_early_data,
      TLSEXT_IDX_certificate_authorities,
